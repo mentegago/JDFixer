@@ -1,6 +1,5 @@
 ﻿using HarmonyLib;
 using System.Linq;
-using System.Reflection;
 
 namespace JDFixer
 {
@@ -153,24 +152,9 @@ namespace JDFixer
     }
 
 
-    [HarmonyPatch(typeof(MissionSelectionMapViewController), "SongPlayerCrossfadeToLevelAsync")]
-    internal class MissionSelectionPatch
-    {
-        internal static BeatmapLevel cc_level = null;
-        internal static void Postfix(BeatmapLevel level)
-        {
-            cc_level = level;
-        }
-    }
-
-
-    [HarmonyPatch]
+    [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), nameof(StandardLevelScenesTransitionSetupDataSO.Init))]
     internal class StandardLevelScenesTransitionSetupDataSOPatch
     {
-        private static MethodBase TargetMethod() => AccessTools.FirstMethod(typeof(StandardLevelScenesTransitionSetupDataSO),
-            m => m.Name == nameof(StandardLevelScenesTransitionSetupDataSO.Init) &&
-                 m.GetParameters().All(p => p.ParameterType != typeof(IBeatmapLevelData)));
-
         internal static void Postfix(GameplayModifiers gameplayModifiers, PracticeSettings practiceSettings)
         {
             BeatmapInfo.speedMultiplier = gameplayModifiers.songSpeedMul;

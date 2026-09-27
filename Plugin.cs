@@ -2,7 +2,6 @@
 using IPA;
 using IPA.Config;
 using IPA.Config.Stores;
-using IPA.Loader;
 using IPALogger = IPA.Logging.Logger;
 using JDFixer.Installers;
 using SiraUtil.Zenject;
@@ -38,7 +37,6 @@ namespace JDFixer
             harmony = new Harmony("com.zephyr.BeatSaber.JDFixer");
             //TimeSetup.Patch();
             harmony.PatchAll(System.Reflection.Assembly.GetExecutingAssembly());
-            CheckForCustomCampaigns();
             UI.Donate.Refresh_Text();
         }
 
@@ -51,12 +49,5 @@ namespace JDFixer
         }
 
 
-        internal static bool CheckForCustomCampaigns()
-        {
-            var cc_installed = PluginManager.GetPluginFromId("CustomCampaigns");
-            Plugin.Log.Debug("CC installed: " + cc_installed);
-
-            return cc_installed != null;
-        }
     }
 }
